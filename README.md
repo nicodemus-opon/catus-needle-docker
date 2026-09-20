@@ -61,7 +61,7 @@ Base URL: `http://localhost:7860`. The browser playground UI is at `/`.
 |---|---|
 | `POST /complete` | `{"tools": [...]` or JSON string, `"query": "..."}` → tool-call JSON (`function_calls`, `reasoning`, `confidence`, …) |
 | `POST /reset` | Clear server-side state → `{"ok": true}` |
-| `GET /model` | Active weights → `{"name": ...}` |
+| `GET /model` | Active weights → `{"name": "needle3.cact"}` (we pass `--weights` explicitly; upstream's built-in default label is a stale `"needle-2 (base)"` even though it loads Needle 3 — see `Engine.name` in `needle/playground/server.py`) |
 | `POST /load-model` | Upload a `.cact` (raw bytes + `X-Filename` header) to swap weights at runtime |
 | `POST /finetune` | `{"tools": [...], "api_key": "sk-or-…", "samples": 200}` — needs the `[train]` image variant (below) |
 | `GET /finetune/status` | Background fine-tune progress |

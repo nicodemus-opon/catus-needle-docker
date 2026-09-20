@@ -9,7 +9,7 @@ services:
       context: .
       # Uncomment to bake training deps in and enable POST /finetune:
       # args:
-      #   CACTUS_NEEDLE_SPEC: "cactus-needle[train]"
+      #   CACTUS_NEEDLE_SPEC: "cactus-needle[train]>=3,<4"
     image: cactus-needle3:latest
     # NOTE: no `container_name`, `ports`, or custom `networks` here on purpose —
     # Coolify manages naming/networking and routes via its proxy (see README).
@@ -28,7 +28,10 @@ services:
       start_period: 60s
     # Serve a fine-tuned archive instead of the base model:
     #   1. place tuned.cact next to the compose file
-    #   2. uncomment the two lines below
+    #   2. point --weights at it in the command below
     # volumes:
     #   - ./tuned.cact:/app/tuned.cact:ro
-    # command: ["--host", "0.0.0.0", "--port", "7860", "--weights", "/app/tuned.cact"]
+    # Load the base weights explicitly (same file the server would fetch by
+    # default) so GET /model reports {"name": "needle3.cact"} instead of the
+    # stale upstream default label "needle-2 (base)". See README.
+    command: ["--host", "0.0.0.0", "--port", "7860", "--weights", "/app/needle3.cact"]
