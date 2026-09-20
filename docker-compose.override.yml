@@ -1,0 +1,8 @@
+# Local-dev only: publishes the API port to the host.
+# Plain `docker compose up` merges this file automatically.
+# Coolify deploys from docker-compose.yml (expose-only) and routes via its
+# proxy, so this file does not affect Coolify deployments.
+services:
+  needle3:
+    ports:
+      - "7860:7860"

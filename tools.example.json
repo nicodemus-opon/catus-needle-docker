@@ -1,0 +1,29 @@
+{
+  "tools": [
+    {
+      "name": "set_lights",
+      "description": "Turn a room's lights on or off and set brightness",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "room": { "type": "string", "description": "which room to control, e.g. living room" },
+          "on": { "type": "boolean" },
+          "brightness": { "type": "integer", "minimum": 0, "maximum": 100 }
+        },
+        "required": ["room", "on"]
+      }
+    },
+    {
+      "name": "get_weather",
+      "description": "Get the current weather for a city",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "city": { "type": "string" }
+        },
+        "required": ["city"]
+      }
+    }
+  ],
+  "query": "dim the living room to 30"
+}

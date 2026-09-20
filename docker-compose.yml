@@ -1,0 +1,34 @@
+# Cactus Needle 3 API server: tools are configured PER REQUEST via
+# POST /complete {"tools": [...], "query": "..."} — nothing is hardcoded.
+# Docs: https://cactuscompute.com/blog/needle-python-docs
+# API source: https://github.com/cactus-compute/needle/blob/main/needle/playground/server.py
+
+services:
+  needle3:
+    build:
+      context: .
+      # Uncomment to bake training deps in and enable POST /finetune:
+      # args:
+      #   CACTUS_NEEDLE_SPEC: "cactus-needle[train]"
+    image: cactus-needle3:latest
+    # NOTE: no `container_name`, `ports`, or custom `networks` here on purpose —
+    # Coolify manages naming/networking and routes via its proxy (see README).
+    # Local `docker compose up` auto-merges docker-compose.override.yml for ports.
+    expose:
+      - "7860"
+    environment:
+      NEEDLE_TELEMETRY: "0"
+      DO_NOT_TRACK: "1"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "-X", "POST", "http://localhost:7860/complete", "-H", "Content-Type: application/json", "-d", "{\"tools\":[],\"query\":\"ping\"}"]
+      interval: 15s
+      timeout: 30s
+      retries: 5
+      start_period: 60s
+    # Serve a fine-tuned archive instead of the base model:
+    #   1. place tuned.cact next to the compose file
+    #   2. uncomment the two lines below
+    # volumes:
+    #   - ./tuned.cact:/app/tuned.cact:ro
+    # command: ["--host", "0.0.0.0", "--port", "7860", "--weights", "/app/tuned.cact"]

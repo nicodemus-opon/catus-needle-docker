@@ -1,0 +1,19 @@
+# Python / local dev
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Secrets / local overrides
+.env
+.env.*
+
+# Model weights are fetched at build time; don't commit large binaries
+*.cact
+*.safetensors
+*.idx
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
