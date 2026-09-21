@@ -21,10 +21,14 @@ services:
       DO_NOT_TRACK: "1"
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "-X", "POST", "http://localhost:7860/complete", "-H", "Content-Type: application/json", "-d", "{\"tools\":[],\"query\":\"ping\"}"]
-      interval: 15s
-      timeout: 30s
-      retries: 5
+      # Cheap liveness probe: GET /model does zero inference (just returns
+      # {"name": ...}). Do NOT probe POST /complete here — Engine.complete()
+      # takes a lock and runs CPU-bound inference, so a 15s inference probe
+      # with timeout > interval piles up threads and pegs CPU at idle.
+      test: ["CMD", "curl", "-f", "http://localhost:7860/model"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
       start_period: 60s
     # Serve a fine-tuned archive instead of the base model:
     #   1. place tuned.cact next to the compose file

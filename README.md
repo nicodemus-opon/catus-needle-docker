@@ -1,4 +1,4 @@
-# cactus-docker
+# cactus-needle-docker
 
 Dockerized [Cactus Needle 3](https://cactuscompute.com/needle) API server.
 Needle 3 is a tiny (8–29 MB) on-device foundation model for tool calling and
